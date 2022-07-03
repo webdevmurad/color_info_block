@@ -1,0 +1,34 @@
+{
+    "name": "color_info_block",
+    "keywords": [
+      "codex editor",
+      "color info block",
+      "tool",
+      "editor.js",
+      "editorjs"
+    ],
+    "description": "ColorInfoBlock Tool for Editor.js",
+    "main": "./dist/bundle.js",
+    "scripts": {
+      "build": "webpack --mode production",
+      "build:dev": "webpack --mode development --watch"
+    },
+    "author": {
+      "name": "Murad",
+      "email": "murad-arslangiraev-1994@mail.ru"
+    },
+    "devDependencies": {
+      "@babel/core": "^7.3.4",
+      "@babel/preset-env": "^7.3.4",
+      "babel-loader": "^8.0.5",
+      "css-loader": "^1.0.0",
+      "raw-loader": "^3.1.0",
+      "style-loader": "^0.21.0",
+      "webpack": "^4.29.5",
+      "webpack-cli": "^3.2.3"
+    },
+    "dependencies": {
+      "@editorjs/editorjs": "^2.24.3"
+    }
+  }
+  

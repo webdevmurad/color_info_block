@@ -1,0 +1,163 @@
+/**
+ * Plugin styles
+ */
+.ce-colored-block {
+    font-family: 'Muller';
+    font-size: 18px;
+    padding: 35px;
+    margin: 0;
+    line-height: 1.25em;
+    border-radius: 10px;
+    outline: none;
+}
+
+.ce-colored-block .ce-colored-block-text {
+    width: 100%;
+    height: 100%;
+    outline: none;
+}
+
+.ce-colored-block-text b {
+    text-decoration: underline;
+}
+
+.ce-colored-block .ce-colored-block-body {
+    display: flex;
+    padding-top: 20px;
+}
+
+.ce-colored-block-body svg {
+    padding-right: 14px;
+}
+
+.ce-colored-block input {
+    font-size: 20px;
+    background: transparent;
+    border: none;
+    outline: none;
+}
+
+.ce-colored-block p{
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/**
+* Styles for Plugin icon in Toolbar
+*/
+.ce-colored-block__icon {}
+
+.ce-colored-block[contentEditable=true][data-placeholder]::before{
+    position: absolute;
+    content: attr(data-placeholder);
+    color: #707684;
+    font-weight: normal;
+    display: none;
+    cursor: text;
+}
+
+.ce-colored-block[contentEditable=true][data-placeholder]:empty::before {
+    display: block;
+}
+
+.ce-colored-block[contentEditable=true][data-placeholder]:empty:focus::before {
+    display: none;
+}
+
+.color-block {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #e8e8eb;
+    padding: 4px 4px;
+    -webkit-box-shadow: 0 3px 15px -3px rgb(13 20 33 / 13%);
+    box-shadow: 0 3px 15px -3px rgb(13 20 33 / 13%);
+    border-radius: 6px;
+    z-index: 3;
+    bottom: 0;
+}
+
+.color-selected {
+    border: 3px solid red;
+}
+
+.span-block {
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin: 0 3px;
+    cursor: pointer;
+}
+
+
+.icon-block {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #e8e8eb;
+    padding: 4px 4px;
+    -webkit-box-shadow: 0 3px 15px -3px rgb(13 20 33 / 13%);
+    box-shadow: 0 3px 15px -3px rgb(13 20 33 / 13%);
+    border-radius: 6px;
+    z-index: 4;
+    bottom: 0;
+}
+
+.icon-block svg {
+    margin: 0 3px;
+    cursor: pointer;
+}
+
+.icon-setting {
+    width: 22px;
+    height: 22px;
+}
+
+.icon-setting path {
+    fill: #673AB7;
+}
+
+.icon-start {
+    width: 22px;
+    height: 22px;
+}
+
+.icon-start path {
+    fill: #FE9803;
+}
+
+.icon-important {
+width: 22px;
+height: 22px;
+}
+
+.icon-important path {
+fill: #D64541;
+}
+
+.icon-lightning {
+    width: 17px;
+    height: 24px;
+}
+
+.icon-lightning path {
+    fill: #54A0FF;
+}
+
+.icon-delete {
+    width: 22px;
+    height: 22px;
+}
+
+.ce-colored-block-header {
+    display: flex;
+}
+
+.ce-colored-block-header svg {
+    margin-right: 14px;
+}
