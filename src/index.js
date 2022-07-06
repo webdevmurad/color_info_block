@@ -220,11 +220,13 @@ class ColoredInfoBlock {
         const settings = document.querySelector('.ce-settings')
         const createdSubTag = document.querySelector('.tooltip-block')
 
-        if(createdSubTag === null) {
+        if (createdSubTag === null) {
             const subTag = document.createElement('DIV')
             subTag.classList.toggle('tooltip-block')
             settings.appendChild(subTag)
         }
+
+        this.removeChildElements()
 
         /** Add type selectors */
         sections.forEach(section => {
@@ -260,6 +262,7 @@ class ColoredInfoBlock {
 
     renderSectionContent() {
         const sectionContent = document.querySelector('.tooltip-block')
+
         sectionContent.innerHTML = ''
         sectionContent.setAttribute('class', 'tooltip-block')
 
@@ -330,7 +333,7 @@ class ColoredInfoBlock {
         COLORS_SPAN.forEach((colorSpan) => {
             colorSpan.classList.remove('color-selected')
 
-            if(Number(colorSpan.id) === this.colorActive.id) {
+            if (Number(colorSpan.id) === this.colorActive.id) {
                 colorSpan.classList.add('color-selected')
             }
         })
@@ -342,20 +345,19 @@ class ColoredInfoBlock {
     }
 
     selectIcon(event) {
-        console.log(event.target.id)
+        console.log(this._element)
         this.selectedActiveIcon(this.getSelectedIconData(event.target.id))
     }
 
     selectedActiveColor(object) {
-        if(typeof object === 'object') {
+        if (typeof object === 'object') {
             this.colorActive = object
         }
-
+        console.log('_element', this._element)
         this.colorActiveAdded()
 
-        const ACTIVE_TAG = document.querySelector(`.${this._CSS.wrapper}`);
-        ACTIVE_TAG.style.backgroundColor = this.colorActive.backgroundColor
-        ACTIVE_TAG.style.borderLeft = `5px solid ${this.colorActive.color}`
+        this._element.style.backgroundColor = this.colorActive.backgroundColor
+        this._element.style.borderLeft = `5px solid ${this.colorActive.color}`
         this.activeColor()
     }
 
@@ -370,34 +372,34 @@ class ColoredInfoBlock {
         }
 
         if (selectedIcon.id === 'delete') {
-            const HEADER_SVG = document.querySelector('.ce-colored-block-header svg')
-            const BODY_SVG = document.querySelector('.ce-colored-block-body svg')
+            const HEADER_SVG = this._element.querySelector('.ce-colored-block-header svg')
+            const BODY_SVG = this._element.querySelector('.ce-colored-block-body svg')
 
-            if(HEADER_SVG) {
+            if (HEADER_SVG) {
                 HEADER_SVG.remove()
             }
 
-            if(BODY_SVG) {
+            if (BODY_SVG) {
                 BODY_SVG.remove()
             }
 
             return
         }
 
-        const INPUT_HEADER = document.querySelector('.ce-colored-block input')
+        const INPUT_HEADER = this._element.querySelector('.ce-colored-block input')
         
-        if(INPUT_HEADER.value) {
-            const HEADER_WRAP = document.querySelector('.ce-colored-block-header')
-            const HEADER_SVG = document.querySelector('.ce-colored-block-header svg')
-            const BODY_SVG = document.querySelector('.ce-colored-block-body svg')
+        if (INPUT_HEADER.value) {
+            const HEADER_WRAP = this._element.querySelector('.ce-colored-block-header')
+            const HEADER_SVG = this._element.querySelector('.ce-colored-block-header svg')
+            const BODY_SVG = this._element.querySelector('.ce-colored-block-body svg')
 
 
-            if(HEADER_SVG) {
+            if (HEADER_SVG) {
                 HEADER_SVG.remove()
                 this.iconActive.id = null
             }
 
-            if(BODY_SVG) {
+            if (BODY_SVG) {
                 BODY_SVG.remove()
                 this.iconActive.id = null
             }
@@ -405,16 +407,16 @@ class ColoredInfoBlock {
             HEADER_WRAP.insertAdjacentHTML('afterbegin', selectedIcon.icon)
             this.activeColor()
         } else {
-            const BODY_WRAP = document.querySelector('.ce-colored-block-body')
-            const HEADER_SVG = document.querySelector('.ce-colored-block-header svg')
-            const BODY_SVG = document.querySelector('.ce-colored-block-body svg')
+            const BODY_WRAP = this._element.querySelector('.ce-colored-block-body')
+            const HEADER_SVG = this._element.querySelector('.ce-colored-block-header svg')
+            const BODY_SVG = this._element.querySelector('.ce-colored-block-body svg')
 
-            if(HEADER_SVG) {
+            if (HEADER_SVG) {
                 HEADER_SVG.remove()
                 this.iconActive.id = null
             }
 
-            if(BODY_SVG) {
+            if (BODY_SVG) {
                 BODY_SVG.remove()
                 this.iconActive.id = null
             }
@@ -425,9 +427,9 @@ class ColoredInfoBlock {
     }
 
     activeColor() {
-        const HEADER_SVG = document.querySelector('.ce-colored-block-header svg path')
+        const HEADER_SVG = this._element.querySelector('.ce-colored-block-header svg path')
         
-        if(HEADER_SVG) {
+        if (HEADER_SVG) {
             HEADER_SVG.style.fill = this.colorActive.color
         }
     }
@@ -439,6 +441,8 @@ class ColoredInfoBlock {
 
         return ICONS.find(icon => icon.id === Number(idIcon))
     }
+
+    
 
     /**
      * Return default level
@@ -472,10 +476,10 @@ class ColoredInfoBlock {
         * @public
         */
     save(toolsContent) {
-        const headerContent = document.querySelector('.ce-colored-block-header input')
+        const headerContent = toolsContent.querySelector('input')
 
         return {
-            header: headerContent.value,
+            header: headerContent.value ?? null,
             icon: this.iconActive.id,
             text: toolsContent.innerHTML,
             colorLevel: this.colorActive.id,
