@@ -1,5 +1,5 @@
-const {colors: COLOR_PALETTE} = require('./colors.js');
-const {icons: ICONS} = require('./icons.js');
+const { colors: COLOR_PALETTE } = require('./colors.js');
+const { icons: ICONS } = require('./icons.js');
 require('./index.css').toString();
 
 const SECTION_COLOR = 'color'
@@ -12,9 +12,21 @@ const sections = [
     },
     {
         code: SECTION_ICON,
-        icon: '<svg width="18px" height="18px" viewBox="0 0 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g></g><path d="M9.667 0h-7.667v17h13v-11.692l-5.333-5.308zM10 1.742l3.273 3.258h-3.273v-3.258zM3 16v-15h6v5h5v10h-11z" fill="#000000" /></svg>',
+        icon: '<svg width="22px" height="22px"viewBox="0 0 32 32" enable-background="new 0 0 32 32" version="1.1" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="Favorite"><path id="3" d="M30.9,10.6C30.8,10.2,30.4,10,30,10h0h-9l-4.1-8.4C16.7,1.2,16.4,1,16,1v0c0,0,0,0,0,0   c-0.4,0-0.7,0.2-0.9,0.6L11,10H2c-0.4,0-0.8,0.2-0.9,0.6c-0.2,0.4-0.1,0.8,0.2,1.1l6.6,7.6L5,29.7c-0.1,0.4,0,0.8,0.3,1   s0.7,0.3,1.1,0.1l9.6-4.6l9.6,4.6C25.7,31,25.8,31,26,31h0h0h0c0.5,0,1-0.4,1-1c0-0.2,0-0.3-0.1-0.5l-2.8-10.3l6.6-7.6   C31,11.4,31.1,10.9,30.9,10.6z"/></g></svg>',
     },
 ]
+
+let activeId = ''
+
+const generateId = () => {
+    let s4 = () => {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+    }
+    //return id of format 'aaaaaaaa'-'aaaa'-'aaaa'-'aaaa'-'aaaaaaaaaaaa'
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+}
 
 class ColoredInfoBlock {
     /**
@@ -72,8 +84,6 @@ class ColoredInfoBlock {
         // Сократить до ID
         // selectedColorId
         this.colorActive = {
-            backgroundColor: 'rgb(241,244,246, 0.3)',
-            color: '#F1F4F6',
             id: 1,
         }
 
@@ -132,6 +142,8 @@ class ColoredInfoBlock {
          */
         TAG.innerHTML = this._data.text || '';
 
+        WRAP.setAttribute('id', generateId())
+
         TAG.classList.add('ce-colored-block-text')
         INPUT_HEADER.setAttribute('placeholder', 'Заголовок')
         INPUT_HEADER.addEventListener('input', this.workWithHeader.bind(this))
@@ -147,8 +159,11 @@ class ColoredInfoBlock {
          */
         WRAP.classList.add(this._CSS.wrapper);
 
-        WRAP.style.backgroundColor = this.colorActive.backgroundColor
-        WRAP.style.borderLeft = `5px solid ${this.colorActive.color}`
+        const defaultColorObject = this.getSelectedColorData(this.colorActive.id)
+
+        WRAP.style.backgroundColor = defaultColorObject.backgroundColor
+        WRAP.style.borderLeft = `5px solid ${defaultColorObject.color}`
+        WRAP.setAttribute('id-color', defaultColorObject.id)
 
         /**
          * Make tag editable
@@ -163,10 +178,6 @@ class ColoredInfoBlock {
         TAG.dataset.placeholder = this.api.i18n.t(this._settings.placeholder || '');
 
         return WRAP;
-    }
-
-    checkField(event) {
-        console.log(event)
     }
 
     workWithHeader(event) {
@@ -225,6 +236,8 @@ class ColoredInfoBlock {
             subTag.classList.toggle('tooltip-block')
             settings.appendChild(subTag)
         }
+
+        activeId = this._element.id
 
         this.removeChildElements()
 
@@ -329,11 +342,12 @@ class ColoredInfoBlock {
 
     colorActiveAdded() {
         const COLORS_SPAN = document.querySelectorAll('.color-block .span-block')
+        const idActiveColor = document.getElementById(activeId).getAttribute('id-color')
 
         COLORS_SPAN.forEach((colorSpan) => {
             colorSpan.classList.remove('color-selected')
 
-            if (Number(colorSpan.id) === this.colorActive.id) {
+            if (Number(colorSpan.id) === Number(idActiveColor)) {
                 colorSpan.classList.add('color-selected')
             }
         })
@@ -345,20 +359,19 @@ class ColoredInfoBlock {
     }
 
     selectIcon(event) {
-        console.log(this._element)
         this.selectedActiveIcon(this.getSelectedIconData(event.target.id))
     }
 
     selectedActiveColor(object) {
         if (typeof object === 'object') {
-            this.colorActive = object
+            this.colorActive = object.id
         }
-        console.log('_element', this._element)
-        this.colorActiveAdded()
 
-        this._element.style.backgroundColor = this.colorActive.backgroundColor
-        this._element.style.borderLeft = `5px solid ${this.colorActive.color}`
-        this.activeColor()
+        document.getElementById(activeId).style.backgroundColor = object.backgroundColor
+        document.getElementById(activeId).style.borderLeft = `5px solid ${object.color}`
+        document.getElementById(activeId).setAttribute('id-color', object.id)
+        this.activeColorIcon()
+        this.colorActiveAdded()
     }
 
     selectedActiveIcon(selectedIcon) {
@@ -405,7 +418,7 @@ class ColoredInfoBlock {
             }
 
             HEADER_WRAP.insertAdjacentHTML('afterbegin', selectedIcon.icon)
-            this.activeColor()
+            this.activeColorIcon()
         } else {
             const BODY_WRAP = this._element.querySelector('.ce-colored-block-body')
             const HEADER_SVG = this._element.querySelector('.ce-colored-block-header svg')
@@ -422,15 +435,20 @@ class ColoredInfoBlock {
             }
 
             BODY_WRAP.insertAdjacentHTML('afterbegin', selectedIcon.icon)
-            this.activeColor()
+            this.activeColorIcon()
         }
     }
 
-    activeColor() {
+    activeColorIcon() {
         const HEADER_SVG = this._element.querySelector('.ce-colored-block-header svg path')
+        const BODY_SVG = this._element.querySelector('.ce-colored-block-body svg path')
         
         if (HEADER_SVG) {
-            HEADER_SVG.style.fill = this.colorActive.color
+            HEADER_SVG.style.fill = this.getSelectedColorData(this.colorActive).color
+        }
+
+        if (BODY_SVG) {
+            BODY_SVG.style.fill = this.getSelectedColorData(this.colorActive).color
         }
     }
 
@@ -440,6 +458,10 @@ class ColoredInfoBlock {
         }
 
         return ICONS.find(icon => icon.id === Number(idIcon))
+    }
+
+    getSelectedColorData(idColor) {
+        return COLOR_PALETTE.find(color => color.id === Number(idColor))
     }
 
     
@@ -482,7 +504,7 @@ class ColoredInfoBlock {
             header: headerContent.value ?? null,
             icon: this.iconActive.id,
             text: toolsContent.innerHTML,
-            colorLevel: this.colorActive.id,
+            colorCode: this.colorActive.id,
         };
     }
 
