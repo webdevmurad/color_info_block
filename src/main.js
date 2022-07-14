@@ -1,31 +1,31 @@
 import EditorJS from '@editorjs/editorjs';
-const ColoredInfoBlock = require('./index.js');
-const Header = require('./header/header.js')
+
+const ColoredInfoBlock = require('./index');
+const Header = require('./header/header');
 
 const editor = new EditorJS({
-    /**
-     * Id of Element that should contain Editor instance
-     */
-    holder: 'editorjs',
-    tools: {
-        header: {
-            class: Header,
-            inlineToolbar: true
-        },
-        coloredInfoBlock: {
-            class: ColoredInfoBlock,
-            inlineToolbar: true
-        }
+  /**
+   * Id of Element that should contain Editor instance
+   */
+  holder: 'editorjs',
+  tools: {
+    header: {
+      class: Header,
+      inlineToolbar: true,
     },
+    coloredInfoBlock: {
+      class: ColoredInfoBlock,
+      inlineToolbar: true,
+    },
+  },
 });
 
+const saveBtn = document.querySelector('button');
 
-let saveBtn = document.querySelector('button')
+console.log(editor);
 
-console.log(editor)
-
-saveBtn.addEventListener('click', function() {
-    editor.save().then((data) => {
-        console.log(data)
-    })
-})
+saveBtn.addEventListener('click', () => {
+  editor.save().then((data) => {
+    console.log(data);
+  });
+});
