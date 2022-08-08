@@ -22,15 +22,13 @@
         "@babel/preset-env": "^7.3.4",
         "babel-loader": "^8.0.5",
         "css-loader": "^1.0.0",
-        "eslint": "^8.19.0",
-        "eslint-config-airbnb-base": "^15.0.0",
-        "eslint-plugin-import": "^2.26.0",
         "raw-loader": "^3.1.0",
         "style-loader": "^0.21.0",
         "webpack": "^4.29.5",
         "webpack-cli": "^3.2.3"
     },
     "dependencies": {
-        "@editorjs/editorjs": "^2.24.3"
+        "@editorjs/editorjs": "^2.24.3",
+        "@editorjs/paragraph": "^2.8.0"
     }
 }
